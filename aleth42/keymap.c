@@ -16,12 +16,22 @@
 #include QMK_KEYBOARD_H
 #include "keymap_jp.h"
 
-// Defines names for use in layer keycodes and the keymap
-enum layer_names {
-    _QWERTY,
-    _LOWER,
-    _RAISE,
-    _ADJUST,
+// DONT FORGET TO UPDATE COMBO_COUNT in config.h when adding a new combo
+typedef const uint16_t comb_keys_t[];
+static PROGMEM comb_keys_t
+  comb_keys_Enter = {KC_J, KC_O, COMBO_END},
+  comb_keys_BackSpace = {KC_J, KC_I, COMBO_END},
+  comb_keys_Tab = {KC_W, KC_R, COMBO_END},
+  comb_keys_Kana = {KC_G, KC_J, COMBO_END},
+  comb_keys_Eisu = {KC_G, KC_H, COMBO_END},
+  comb_keys_Escape = {KC_W, KC_E, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+  COMBO( comb_keys_Enter, KC_ENT ),
+  COMBO( comb_keys_BackSpace, KC_BSPC ),
+  COMBO( comb_keys_Tab, KC_TAB ),
+  COMBO( comb_keys_Kana, KC_LANG1 ),
+  COMBO( comb_keys_Eisu, KC_LANG2 ),
+  COMBO( comb_keys_Escape, KC_ESC ),
 };
 
 // Defines the keycodes used by our macros in process_record_user
@@ -30,25 +40,46 @@ enum custom_keycodes {
     LOWER,
     RAISE,
     ADJUST,
+    MACRO1,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	if (record->event.pressed) {
+		switch (keycode) {
+			case MACRO1:
+                                SEND_STRING(SS_LCTRL("z")"[");
+				return false;
+		}
+	}
+	return true;
+};
+
+
+// Defines names for use in layer keycodes and the keymap
+enum layer_names {
+    _QWERTY,
+    _LOWER,
+    _RAISE,
+    _ADJUST,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  /* Default Layer
      * ,-----------------------------------------------------------.
-     * | Tab|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | BS |
+     * | Tab|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | -  |
      * |-----------------------------------------------------------|
      * |Ctl/Esc|  A |  S |  D |  F |  G |  H |  J |  K |  L | ;    |
      * |-----------------------------------------------------------|
      * |Sft/Tab|  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(/) |
      * |-----------------------------------------------------------|
-     * | TAB  | LAlt|Gui/e|  Ent/lower|  spc/cursor|raise/k| -|Ent |
+     * | TAB  | LAlt|Gui/e|  Ent/lower|  spc/cursor|raise/k| _| _  |
      * `-----------------------------------------------------------'
  */
     [_QWERTY] = LAYOUT(
-        KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_BSPC,
+        KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_MINS,
  CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN,
  LSFT_T(KC_TAB), KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_SLSH),
-        KC_TAB , KC_LALT   , GUI_T(KC_LANG2), LT(_LOWER, KC_ENT),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LANG1), KC_MINS, KC_ENT
+        KC_TAB , KC_LALT   , GUI_T(KC_LANG2), LT(_LOWER, KC_ENT),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LANG1), JP_UNDS, JP_UNDS
         ),
 
  /* Lower Layer
@@ -89,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	/* Adjust Layer
      * ,-----------------------------------------------------------.
-     * |Mute|    |    | End|    |    |    |    |    |    |    |    |
+     * |Mute|    |    | End|    |    |    |    |    |    |^z[ |    |
      * |-----------------------------------------------------------|
      * |       |Home|    | Del |    |    |Left|Down|Up  |Right|    |
      * |-----------------------------------------------------------|
@@ -99,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------'
       */
     [_ADJUST] = LAYOUT(
-        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, _______, _______,  _______, _______,
+        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, S(KC_TAB), KC_TAB, MACRO1, _______,
 	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
 	_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
 	RESET,   _______, _______, _______, _______, _______, _______, _______
