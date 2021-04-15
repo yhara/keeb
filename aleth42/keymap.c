@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "keymap_jp.h"
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
@@ -34,75 +35,75 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  /* Default Layer
      * ,-----------------------------------------------------------.
-     * | Esc|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | BS |
+     * | Tab|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | BS |
      * |-----------------------------------------------------------|
-     * | Tab |  A |  S |  D |  F |  G |  H |  J |  K |  L | Ent    |
+     * |Ctl/Esc|  A |  S |  D |  F |  G |  H |  J |  K |  L | ;    |
      * |-----------------------------------------------------------|
-     * | LSft   |  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(/)|
+     * |Sft/Tab|  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(/) |
      * |-----------------------------------------------------------|
-     * | LCtl | LAlt| LGui|  spc fn0  |  spc fn1    |RGui|RAlt|RCtl|
+     * | TAB  | LAlt|Gui/e|  Ent/lower|  spc/cursor|raise/k| -|Ent |
      * `-----------------------------------------------------------'
  */
     [_QWERTY] = LAYOUT(
-        KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_BSPC,
-        KC_TAB,  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_ENT,
-        KC_LSFT, KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_SLSH),
-        KC_LCTL, KC_LALT   , KC_LGUI, LT(_LOWER, KC_SPC),   LT(_RAISE, KC_SPC), KC_RGUI, KC_RALT, KC_RCTL
+        KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_BSPC,
+ CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN,
+ LSFT_T(KC_TAB), KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_SLSH),
+        KC_TAB , KC_LALT   , GUI_T(KC_LANG2), LT(_LOWER, KC_ENT),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LANG1), KC_MINS, KC_ENT
         ),
 
  /* Lower Layer
      * ,-----------------------------------------------------------.
-     * |  ~ |  ! |  @ |  # |  $ |  % |  ^ |  & |  * |  ( |  ) | Del|
+     * |    |  ! |  @ |  # |  $ |  % |  ^ |  & |  ( | )  | *  | }  |
      * |-----------------------------------------------------------|
-     * |        |    |    |    |    |     | _ | + | { | } |  Pipe  |
+     * |        | ~  |Pipe| =  |  \ |  `  | ' | { | [ | ] |   :    |
      * |-----------------------------------------------------------|
-     * |          |    |    |    |    |    |   | ;  | '  | Up |    |
+     * |          |    |    |    |    |Bspc| " | +  |  < |  > | ?  |
      * |-----------------------------------------------------------|
-     * |     |    |     |           |             |Left|Down|Right |
+     * |     |    |     |           |             |    | _  |  _   |
      * `-----------------------------------------------------------'
      */
     [_LOWER] = LAYOUT(
-        KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
-		_______, _______, _______, _______, _______, _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
-		_______, _______, _______, _______, _______, _______, _______, KC_SCLN, KC_QUOT, KC_UP,   _______,
-		_______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT
-		),
+        _______, KC_EXLM, JP_AT,   KC_HASH, KC_DLR,  KC_PERC, JP_CIRC, JP_AMPR, JP_LPRN,JP_RPRN, JP_ASTR,JP_RCBR,
+	_______,S(JP_CIRC),S(JP_YEN),JP_EQL,JP_YEN,  JP_GRV , JP_QUOT, JP_LCBR ,JP_LBRC,JP_RBRC, JP_COLN,
+	_______, _______, _______, _______, _______, KC_BSPC, JP_DQT , JP_PLUS,S(KC_COMM),S(KC_DOT),S(KC_SLSH),
+	_______, _______, _______, _______, _______,_______, JP_UNDS , JP_UNDS
+	),
 
 	/* Raise Layer
      * ,-----------------------------------------------------------.
-     * |  ` |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 |  0 | Del|
+     * |F12 | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 |F10 |F11 |
      * |-----------------------------------------------------------|
-     * |  F1   | F2  | F3 | F4 | F5 |  F6 | - | = | [ | ] |  Pipe  |
+     * |       |  1  |  2 |  3 |  4 |   5 | 6 | 7 | 8 | 9 |  0     |
      * |-----------------------------------------------------------|
-     * |    F7    | F8 | F9 | F10| F11| F12|  \ |  \ |   |    |    |
+     * |          |    |    |    |    |    |    | :  | , | .  | /  |
      * |-----------------------------------------------------------|
-     * |     |    |     |           |             |     |    |     |
+     * |     |    |     |           |             |     |  - |     |
      * `-----------------------------------------------------------'
      */
     [_RAISE] = LAYOUT(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
-		KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-		KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, _______, _______, _______,
-		_______, _______, _______, _______, _______, _______, _______, _______
-		),
+        KC_F12 , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10, KC_F11,
+        _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  
+        _______, _______, _______, _______, _______, _______, _______, JP_COLN, KC_TRNS, KC_TRNS, KC_TRNS,
+	_______, _______, _______, _______, _______, _______, KC_TRNS, _______
+	),
 
 	/* Adjust Layer
      * ,-----------------------------------------------------------.
-     * |Mute| F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 | F10|F11 |
+     * |Mute|    |    | End|    |    |    |    |    |    |    |    |
      * |-----------------------------------------------------------|
-     * |       |BTOG |BSTP|BINC| MAC|RGBTOG|HUI|WIN|SAI|VAI|  F12  |
+     * |       |Home|    | Del |    |    |Left|Down|Up  |Right|    |
      * |-----------------------------------------------------------|
-     * |   Caps   |Reset|BBRE|BDEC|    |RMOD|HUD |   |SAD|VAD |    |
+     * |          |Reset|   |    |    |    |    |   |   |    |     |
      * |-----------------------------------------------------------|
-     * |SLEEP|    |     |           |             |     |    |     |
+     * |Reset|    |     |           |             |     |    |     |
      * `-----------------------------------------------------------'
       */
     [_ADJUST] = LAYOUT(
-        KC_MUTE, KC_F1,   KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11,
-		_______, BL_TOGG, BL_STEP, BL_INC,  AG_NORM,  RGB_TOG, RGB_HUI, AG_SWAP, RGB_SAI, RGB_VAI,  KC_F12,
-		KC_CAPS, RESET,   BL_BRTG, BL_DEC,  _______,  RGB_MOD, RGB_HUD, _______, RGB_SAD, RGB_VAD,  _______,
-		KC_SLEP, _______, _______, _______, _______, _______, _______, _______
-		),
+        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, _______, _______,  _______, _______,
+	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
+	_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+	RESET,   _______, _______, _______, _______, _______, _______, _______
+	),
 };
 
 void encoder_update_user(uint8_t index, bool clockwise) {
@@ -110,9 +111,11 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         switch (get_highest_layer(layer_state)) {
             case _QWERTY:
                 if (clockwise) {
-                    tap_code(KC_TAB);
+                  tap_code(KC_SPC);
+                    //tap_code(KC_TAB);
                 } else {
-                    tap_code16(S(KC_TAB));
+                  tap_code(KC_BSPC);
+                    //tap_code16(S(KC_TAB));
                 }
                 break;
             case _RAISE:
