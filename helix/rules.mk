@@ -22,6 +22,18 @@ HELIX_ROWS = 5
 OLED_ENABLE = yes
 LED_UNDERGLOW_ENABLE = no
 
+# OLED_ENABLE が yes のとき
+#   OLED_SELECT が core ならば QMK 標準の oled_dirver.c を使用します。
+#   OLED_SELECT が core 以外ならば従来どおり helix/local_drivers/ssd1306.c を使用します。
+# If OLED_ENABLE is 'yes'
+#   If OLED_SELECT is 'core', use QMK standard oled_dirver.c.
+#   If OLED_SELECT is other than 'core', use helix/local_drivers/ssd1306.c.
+OLED_SELECT = core
+
+#ifeq ($(strip $(OLED_ENABLE)), yes)
+#    SRC += oled_display.c
+#endif
+
 # convert Helix-specific options (that represent combinations of standard options)
 #   into QMK standard options.
 include $(strip $(KEYBOARD_LOCAL_FEATURES_MK))

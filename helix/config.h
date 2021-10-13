@@ -37,4 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    //#define RGBLIGHT_EFFECT_ALTERNATING
 #endif
 
-#define PERMISSIVE_HOLD
+//#define PERMISSIVE_HOLD
+#undef TAPPING_FORCE_HOLD
+#define RETRO_TAPPING

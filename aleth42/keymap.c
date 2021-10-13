@@ -41,19 +41,9 @@ enum custom_keycodes {
     RAISE,
     ADJUST,
     MACRO1,
+    ALT_TAB,
+    SALT_TAB,
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	if (record->event.pressed) {
-		switch (keycode) {
-			case MACRO1:
-                                SEND_STRING(SS_LCTRL("z")"[");
-				return false;
-		}
-	}
-	return true;
-};
-
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
@@ -70,15 +60,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |Ctl/Esc|  A |  S |  D |  F |  G |  H |  J |  K |  L | Ent  |
      * |-----------------------------------------------------------|
-     * |Sft/Tab|  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(-) |
+     * |Sft/Tab |  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(-)|
      * |-----------------------------------------------------------|
-     * | TAB  | LAlt|Gui/T|   Ent/eisu|  spc/cursor|raise/k|TAB| / |
+     * | TAB  | LAlt|Gui/T|  lower/eisu|  spc/cursor|raise/k|TAB| / |
      * `-----------------------------------------------------------'
  */
     [_QWERTY] = LAYOUT(
         KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_SCLN,
  CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_ENT,
- LSFT_T(KC_TAB), KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_MINS),
+ LSFT_T(KC_TAB),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_MINS),
         KC_TAB , KC_LALT   , GUI_T(KC_TAB), LT(_LOWER, KC_LANG2),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LANG1), KC_TAB, KC_SLSH
         ),
 
@@ -120,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	/* Adjust Layer
      * ,-----------------------------------------------------------.
-     * |Mute|    |    | End|    |    |    |    |    |    |^z[ | BS |
+     * |Mute|    |    | End|    |    |    |    |SA(Tab)|A(Tab)|^z[ | BS |
      * |-----------------------------------------------------------|
      * |       |Home|    | Del |    |    |Left|Down|Up  |Right|    |
      * |-----------------------------------------------------------|
@@ -130,24 +120,63 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------'
       */
     [_ADJUST] = LAYOUT(
-        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, S(KC_TAB), KC_TAB, MACRO1, KC_BSPC,
+        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, SALT_TAB, ALT_TAB, MACRO1, KC_BSPC,
 	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
 	_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
 	RESET,   _______, _______, _______, _______, _______, _______, _______
 	),
 };
 
+bool is_cmd_tab_active = false;
+uint16_t cmd_tab_timer = 0;
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
 
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    switch (keycode) {
+      case MACRO1:
+        SEND_STRING(SS_LCTRL("z")"[");
+        return false;
+      case ALT_TAB:
+        if (!is_alt_tab_active) {
+          is_alt_tab_active = true;
+          register_code(KC_LALT);
+        }
+        alt_tab_timer = timer_read();
+        tap_code16(KC_TAB);
+        return false;
+      case SALT_TAB:
+        if (!is_alt_tab_active) {
+          is_alt_tab_active = true;
+          register_code(KC_LALT);
+        }
+        alt_tab_timer = timer_read();
+        tap_code16(S(KC_TAB));
+        return false;
+    }
+  }
+  return true;
+};
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) { /* Left encoder */
         switch (get_highest_layer(layer_state)) {
             case _QWERTY:
                 if (clockwise) {
-                  tap_code(KC_PGDN);
+                  if (!is_cmd_tab_active) {
+                    is_cmd_tab_active = true;
+                    register_code(KC_LGUI);
+                  }
+                  cmd_tab_timer = timer_read();
+                  tap_code16(KC_TAB);
                 } else {
-                  tap_code(KC_PGUP);
+                  if (!is_cmd_tab_active) {
+                    is_cmd_tab_active = true;
+                    register_code(KC_LGUI);
+                  }
+                  cmd_tab_timer = timer_read();
+                  tap_code16(S(KC_TAB));
                 }
                 break;
             case _ADJUST:
@@ -159,25 +188,11 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 break;
             case _RAISE:
                 if (clockwise) {
-                  if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LGUI);
-                  }
-                  alt_tab_timer = timer_read();
-                  tap_code16(KC_TAB);
+                  tap_code(KC_PGDN);
                 } else {
-                  if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LGUI);
-                  }
-                  alt_tab_timer = timer_read();
-                  tap_code16(S(KC_TAB));
+                  tap_code(KC_PGUP);
                 }
-//                if (clockwise) {
-//                    tap_code(KC_VOLU);
-//                } else {
-//                    tap_code(KC_VOLD);
-//                }
+                break;
         }
 
     } else if (index == 1) { /* Right encoder */
@@ -187,12 +202,19 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             tap_code(KC_PGUP);
         }
     }
+    return true;
 }
 
 void matrix_scan_user(void) {
-  if (is_alt_tab_active) {
-    if (timer_elapsed(alt_tab_timer) > 750) {
+  if (is_cmd_tab_active) {
+    if (timer_elapsed(cmd_tab_timer) > 1000) {
       unregister_code(KC_LGUI);
+      is_cmd_tab_active = false;
+    }
+  }
+  if (is_alt_tab_active) {
+    if (timer_elapsed(alt_tab_timer) > 1000) {
+      unregister_code(KC_LALT);
       is_alt_tab_active = false;
     }
   }
