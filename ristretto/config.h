@@ -1,0 +1,4 @@
+
+//#define OLED_TIMEOUT 2000
+//#define OLED_FADE_OUT true
+//#define OLED_SCROLL_TIMEOUT 1000
