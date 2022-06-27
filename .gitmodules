@@ -1,0 +1,3 @@
+[submodule "user_qmk/Tsquash"]
+	path = user_qmk/Tsquash
+	url = https://github.com/Tsquash/vial-qmk
