@@ -41,6 +41,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 _______,_______,_______,_______, _______,                     _______, _______, _______, _______, _______),
 };
 
+//
+// LED
+//
+
 void matrix_init_user(void) {
     writePin(LED1, true);
 }
@@ -85,3 +89,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+//
+// COMBO KEYS
+//
+
+// DONT FORGET TO UPDATE COMBO_COUNT in config.h when adding a new combo
+typedef const uint16_t comb_keys_t[];
+static PROGMEM comb_keys_t
+  comb_keys_Enter = {KC_J, KC_O, COMBO_END},
+  comb_keys_BackSpace = {KC_J, KC_I, COMBO_END},
+  comb_keys_Tab = {KC_W, KC_R, COMBO_END},
+  comb_keys_Escape = {KC_W, KC_E, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+  COMBO( comb_keys_Enter, KC_ENT ),
+  COMBO( comb_keys_BackSpace, KC_BSPC ),
+  COMBO( comb_keys_Tab, KC_TAB ),
+  COMBO( comb_keys_Escape, KC_ESC ),
+};
+
