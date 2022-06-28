@@ -45,29 +45,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // LED
 //
 
-void matrix_init_user(void) {
-    writePin(LED1, true);
+// LED animation on startup
+#define INITIAL_INTERVAL 800
+#define INTERVAL_MUL 0.9
+#define MINIMUM_INTERVAL 10
+bool led1 = true;
+int interval = INITIAL_INTERVAL;
+void swap_led(void) {
+  writePin(LED1, led1);
+  writePin(LED2, !led1);
+  led1 = !led1;
 }
-//bool initialized = false;
-//void matrix_scan_user(void) {
-//  if (!initialized) {
-//    writePinLow(LED1);
-//    writePinLow(LED2);
-//    initialized = true;
-//  }
-//}
-
-
-uint32_t turnoff_leds(uint32_t trigger_time, void *cb_arg) {
-  writePin(LED1, false);
-  writePin(LED2, false);
-  return 0; // We don't need to repeat so just return zero
+uint32_t led_anim(uint32_t trigger_time, void *cb_arg) {
+  interval *= INTERVAL_MUL;
+  if (interval < MINIMUM_INTERVAL) {
+    writePin(LED1, false);
+    writePin(LED2, false);
+    return 0;
+  } else {
+    swap_led();
+    return interval;
+  }
 }
 void keyboard_post_init_user(void) {
-  writePin(LED1, true);
-  writePin(LED2, true);
-  // Turn off LEDs after a while
-  defer_exec(3000, turnoff_leds, NULL);
+  swap_led();
+  defer_exec(INITIAL_INTERVAL, led_anim, NULL);
 }
 
 // Turn on LED2 when layer is changed
