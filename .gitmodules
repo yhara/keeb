@@ -1,3 +1,6 @@
 [submodule "user_qmk/Tsquash"]
 	path = user_qmk/Tsquash
 	url = https://github.com/Tsquash/vial-qmk
+[submodule "user_qmk/e3w2q"]
+	path = user_qmk/e3w2q
+	url = https://github.com/e3w2q/qmk_firmware
