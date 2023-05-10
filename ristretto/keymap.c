@@ -41,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_LOWER] = LAYOUT(
                 KC_AT  , KC_EXLM, JP_AT  , KC_HASH, KC_DLR , KC_PERC,                 JP_CIRC, JP_AMPR, JP_LPRN, JP_RPRN, JP_ASTR, KC_TRNS,
                 KC_NO  , JP_TILD, JP_PIPE, JP_EQL , JP_YEN , JP_GRV,                  JP_QUOT, JP_LCBR, JP_LBRC, JP_RBRC, JP_COLN, JP_RCBR,
-                KC_NO  , KC_NO  , KC_NO  , KC_SLSH, KC_SLSH, KC_SLSH,                 JP_DQUO ,JP_PLUS, JP_LABK, JP_RABK, JP_QUES, JP_UNDS,
+                KC_NO  , KC_NO  , KC_NO  , KC_SLSH, S(KC_INS), KC_SLSH,                 JP_DQUO ,JP_PLUS, JP_LABK, JP_RABK, JP_QUES, JP_UNDS,
                 RESET  , KC_NO  , KC_NO  , KC_NO  , KC_TRNS, KC_NO  ,       KC_SPC,   KC_TRNS, KC_NO  , JP_LCBR, JP_RCBR, KC_NO  , KC_NO
 	),
 	[_ADJUST] = LAYOUT(
