@@ -4,10 +4,10 @@ TMP_DIR = File.expand_path("~/tmp/user_qmk")
 MY_NAME = "yhara"
 
 class Keyboard
-  def initialize(name, path, url: nil, compile_path: nil)
-    @name, @path, @url, @compile_path = name, path, url, compile_path
+  def initialize(name, path, url: nil, kb_path: nil)
+    @name, @path, @url, @kb_path = name, path, url, (kb_path || path.sub("keyboards/", ""))
   end
-  attr_reader :name, :path, :url, :compile_path
+  attr_reader :name, :path, :url, :kb_path
 
   def compile
     run_qmk("compile")
@@ -20,17 +20,22 @@ class Keyboard
   private
 
   def run_qmk(subcommand)
-    raise "TODO: git clone" if keeb.url
+    raise "TODO: git clone" if @url
 
-    cp_r keeb.name, "#{QMK_DIR}/#{keeb.path}/keymaps/#{MY_NAME}"
+    FileUtils.cp_r @name, "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
 
-    sh "qmk #{subcommand} -kb #{keeb.path.sub("keyboards/", "")} -km #{MY_NAME}"
+    sh "qmk #{subcommand} -kb #{@kb_path} -km #{MY_NAME}"
+  end
+
+  def sh(cmd)
+    puts cmd
+    system cmd
   end
 end
 
 KEYBOARDS = [
   Keyboard.new("lesovoz", "keyboards/lesovoz",            url: "https://github.com/Tsquash/vial-qmk"),
-  Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", compile_path: "1upkeyboards/pi40/grid_v1_1"),
+  Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", kb_path: "1upkeyboards/pi40/grid_v1_1"),
 ]
 
 task :setup do
@@ -38,10 +43,12 @@ task :setup do
 end
 
 KEYBOARDS.each do |keeb|
+  desc "Compile '#{keeb.kb_path}'"
   task "compile_#{keeb.name}" do
     keeb.compile
   end
 
+  desc "Compile and flash '#{keeb.kb_path}'"
   task "flash_#{keeb.name}" do
     keeb.flash
   end
