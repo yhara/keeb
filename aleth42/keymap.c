@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "keymap_jp.h"
+#include "keymap_japanese.h"
 
 // DONT FORGET TO UPDATE COMBO_COUNT in config.h when adding a new combo
 typedef const uint16_t comb_keys_t[];
@@ -29,8 +29,8 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO( comb_keys_Enter, KC_ENT ),
   COMBO( comb_keys_BackSpace, KC_BSPC ),
   COMBO( comb_keys_Tab, KC_TAB ),
-  COMBO( comb_keys_Kana, KC_LANG1 ),
-  COMBO( comb_keys_Eisu, KC_LANG2 ),
+  COMBO( comb_keys_Kana, KC_LNG1 ),
+  COMBO( comb_keys_Eisu, KC_LNG2 ),
   COMBO( comb_keys_Escape, KC_ESC ),
 };
 
@@ -69,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_SCLN,
  CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_ENT,
  LSFT_T(KC_TAB),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_MINS),
-        KC_TAB , KC_LALT   , GUI_T(KC_TAB), LT(_LOWER, KC_LANG2),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LANG1), KC_TAB, KC_SLSH
+        KC_TAB , KC_LALT   , GUI_T(KC_TAB), LT(_LOWER, KC_LNG2),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LNG1), KC_TAB, KC_SLSH
         ),
 
  /* Lower Layer
@@ -86,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_LOWER] = LAYOUT(
         _______, KC_EXLM, JP_AT,   KC_HASH, KC_DLR,  KC_PERC, JP_CIRC, JP_AMPR, JP_LPRN,JP_RPRN, JP_ASTR,JP_RCBR,
 	_______,S(JP_CIRC),S(JP_YEN),JP_EQL,JP_YEN,  JP_GRV , JP_QUOT, JP_LCBR ,JP_LBRC,JP_RBRC, JP_COLN,
-	_______, _______, _______, _______, _______, KC_BSPC, JP_DQT , JP_PLUS,S(KC_COMM),S(KC_DOT),JP_UNDS,
+	_______, _______, _______, _______, _______, KC_BSPC, JP_DQUO , JP_PLUS,S(KC_COMM),S(KC_DOT),JP_UNDS,
 	_______, _______, _______, _______, _______,_______, S(KC_SLSH), JP_UNDS
 	),
 
@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F12 , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10, KC_F11,
         _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  
         _______, _______, _______, _______, _______, _______, _______, JP_COLN, KC_TRNS, KC_TRNS, KC_TRNS,
-	RESET  , _______, _______, _______, _______, _______, KC_TRNS, _______
+	QK_BOOT  , _______, _______, _______, _______, _______, KC_TRNS, _______
 	),
 
 	/* Adjust Layer
@@ -122,8 +122,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_ADJUST] = LAYOUT(
         KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, SALT_TAB, ALT_TAB, MACRO1, KC_BSPC,
 	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
-	_______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
-	RESET,   _______, _______, _______, _______, _______, _______, _______
+	_______, QK_BOOT,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+	QK_BOOT,   _______, _______, _______, _______, _______, _______, _______
 	),
 };
 
@@ -136,7 +136,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     switch (keycode) {
       case MACRO1:
-        SEND_STRING(SS_LCTRL("z")"[");
+        SEND_STRING(SS_LCTL("z")"[");
         return false;
       case ALT_TAB:
         if (!is_alt_tab_active) {
