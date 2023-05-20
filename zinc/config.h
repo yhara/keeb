@@ -3,6 +3,8 @@
 
 #undef TAPPING_TERM
 #define TAPPING_TERM 200  // Zinc's default is 100 but it's too fast for me
+#undef DEBOUNCE
+#define DEBOUNCE 50
 
 #ifdef RGB_MATRIX_ENABLE
 #    define DRIVER_LED_TOTAL 48
