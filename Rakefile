@@ -21,9 +21,8 @@ class Keyboard
 
   def run_qmk(subcommand)
     raise "TODO: git clone" if @url
-
-    FileUtils.cp_r @name, "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
-
+    FileUtils.mkdir_p "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
+    sh "cp -r #{@name}/* #{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
     sh "qmk #{subcommand} -kb #{@kb_path} -km #{MY_NAME}"
   end
 
@@ -34,6 +33,7 @@ class Keyboard
 end
 
 KEYBOARDS = [
+  Keyboard.new("aleth42", "keyboards/25keys/aleth42"),
   Keyboard.new("lesovoz", "keyboards/lesovoz",            url: "https://github.com/Tsquash/vial-qmk"),
   Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", kb_path: "1upkeyboards/pi40/grid_v1_1"),
 ]
@@ -44,12 +44,12 @@ end
 
 KEYBOARDS.each do |keeb|
   desc "Compile '#{keeb.kb_path}'"
-  task "compile_#{keeb.name}" do
+  task "#{keeb.name}_compile" do
     keeb.compile
   end
 
   desc "Compile and flash '#{keeb.kb_path}'"
-  task "flash_#{keeb.name}" do
+  task "#{keeb.name}_flash" do
     keeb.flash
   end
 end
