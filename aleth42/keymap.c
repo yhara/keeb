@@ -20,18 +20,10 @@
 typedef const uint16_t comb_keys_t[];
 static PROGMEM comb_keys_t
   comb_keys_Enter = {KC_J, KC_O, COMBO_END},
-  comb_keys_BackSpace = {KC_J, KC_I, COMBO_END},
-  comb_keys_Tab = {KC_W, KC_R, COMBO_END},
-  comb_keys_Kana = {KC_G, KC_J, COMBO_END},
-  comb_keys_Eisu = {KC_G, KC_H, COMBO_END},
-  comb_keys_Escape = {KC_W, KC_E, COMBO_END};
+  comb_keys_BackSpace = {KC_J, KC_I, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
   COMBO( comb_keys_Enter, KC_ENT ),
   COMBO( comb_keys_BackSpace, KC_BSPC ),
-  COMBO( comb_keys_Tab, KC_TAB ),
-  COMBO( comb_keys_Kana, KC_LNG1 ),
-  COMBO( comb_keys_Eisu, KC_LNG2 ),
-  COMBO( comb_keys_Escape, KC_ESC ),
 };
 
 // Defines the keycodes used by our macros in process_record_user
@@ -41,8 +33,6 @@ enum custom_keycodes {
     RAISE,
     ADJUST,
     MACRO1,
-    ALT_TAB,
-    SALT_TAB,
 };
 
 // Defines names for use in layer keycodes and the keymap
@@ -120,17 +110,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------'
       */
     [_ADJUST] = LAYOUT(
-        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, SALT_TAB, ALT_TAB, MACRO1, KC_BSPC,
+        KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, _______, _______, MACRO1, KC_BSPC,
 	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
 	_______, QK_BOOT,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
 	QK_BOOT,   _______, _______, _______, _______, _______, _______, _______
 	),
 };
-
-bool is_cmd_tab_active = false;
-uint16_t cmd_tab_timer = 0;
-bool is_alt_tab_active = false;
-uint16_t alt_tab_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
@@ -138,84 +123,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case MACRO1:
         SEND_STRING(SS_LCTL("z")"[");
         return false;
-      case ALT_TAB:
-        if (!is_alt_tab_active) {
-          is_alt_tab_active = true;
-          register_code(KC_LALT);
-        }
-        alt_tab_timer = timer_read();
-        tap_code16(KC_TAB);
-        return false;
-      case SALT_TAB:
-        if (!is_alt_tab_active) {
-          is_alt_tab_active = true;
-          register_code(KC_LALT);
-        }
-        alt_tab_timer = timer_read();
-        tap_code16(S(KC_TAB));
-        return false;
     }
   }
   return true;
 };
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* Left encoder */
-        switch (get_highest_layer(layer_state)) {
-            case _QWERTY:
-                if (clockwise) {
-                  if (!is_cmd_tab_active) {
-                    is_cmd_tab_active = true;
-                    register_code(KC_LGUI);
-                  }
-                  cmd_tab_timer = timer_read();
-                  tap_code16(KC_TAB);
-                } else {
-                  if (!is_cmd_tab_active) {
-                    is_cmd_tab_active = true;
-                    register_code(KC_LGUI);
-                  }
-                  cmd_tab_timer = timer_read();
-                  tap_code16(S(KC_TAB));
-                }
-                break;
-            case _ADJUST:
-                if (clockwise) {
-                    tap_code(KC_SPC);
-                } else {
-                    tap_code(KC_BSPC);
-                }
-                break;
-            case _RAISE:
-                if (clockwise) {
-                  tap_code(KC_PGDN);
-                } else {
-                  tap_code(KC_PGUP);
-                }
-                break;
-        }
-
-    } else if (index == 1) { /* Right encoder */
-        if (clockwise) {
-            tap_code(KC_PGDN);
-        } else {
-            tap_code(KC_PGUP);
-        }
-    }
-    return true;
-}
-
-void matrix_scan_user(void) {
-  if (is_cmd_tab_active) {
-    if (timer_elapsed(cmd_tab_timer) > 1000) {
-      unregister_code(KC_LGUI);
-      is_cmd_tab_active = false;
-    }
-  }
-  if (is_alt_tab_active) {
-    if (timer_elapsed(alt_tab_timer) > 1000) {
-      unregister_code(KC_LALT);
-      is_alt_tab_active = false;
-    }
-  }
-}
