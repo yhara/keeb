@@ -4,8 +4,8 @@ TMP_DIR = File.expand_path("~/tmp/user_qmk")
 MY_NAME = "yhara"
 
 class Keyboard
-  def initialize(name, path, url: nil, kb_path: nil)
-    @name, @path, @url, @kb_path = name, path, url, (kb_path || path.sub("keyboards/", ""))
+  def initialize(name, path, url: nil, branch: "master", kb_path: nil)
+    @name, @path, @url, @branch, @kb_path = name, path, url, branch, (kb_path || path.sub("keyboards/", ""))
   end
   attr_reader :name, :path, :url, :kb_path
 
@@ -20,10 +20,18 @@ class Keyboard
   private
 
   def run_qmk(subcommand)
-    raise "TODO: git clone" if @url
+    copy_from_git(@url, @branch, @name) if @url
     FileUtils.mkdir_p "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
     sh "cp -r #{@name}/* #{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
     sh "qmk #{subcommand} -kb #{@kb_path} -km #{MY_NAME}"
+  end
+
+  def copy_from_git(url, branch, name)
+    repo_dir = "#{TMP_DIR}/#{name}"
+    if !File.exist?(repo_dir)
+      sh "git clone #{url} -b #{branch} #{repo_dir}"
+    end
+    sh "cp -r #{repo_dir}/#{@path} #{QMK_DIR}/#{@path}"
   end
 
   def sh(cmd)
@@ -34,6 +42,7 @@ end
 
 KEYBOARDS = [
   Keyboard.new("aleth42", "keyboards/25keys/aleth42"),
+  Keyboard.new("bancouver40", "keyboards/sporewoh/bancouver40", url: "https://github.com/ChrisChrisLoLo/qmk_firmware/", branch: "bancouver40"),
   Keyboard.new("lesovoz", "keyboards/lesovoz",            url: "https://github.com/Tsquash/vial-qmk"),
   Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", kb_path: "1upkeyboards/pi40/grid_v1_1"),
 ]
