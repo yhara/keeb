@@ -45,6 +45,7 @@ KEYBOARDS = [
   Keyboard.new("bancouver40", "keyboards/sporewoh/bancouver40", url: "https://github.com/ChrisChrisLoLo/qmk_firmware/", branch: "bancouver40"),
   Keyboard.new("lesovoz", "keyboards/lesovoz",            url: "https://github.com/Tsquash/vial-qmk"),
   Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", kb_path: "1upkeyboards/pi40/grid_v1_1"),
+  Keyboard.new("sugarglider", "keyboards/mechwild/sugarglider"),
 ]
 
 task :setup do
