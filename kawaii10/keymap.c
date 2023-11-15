@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "keymap_jp.h"
+#include "keymap_japanese.h"
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
@@ -25,10 +25,11 @@ enum layer_names {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
     [_DEFAULT] = LAYOUT(
-      KC_7,    KC_8,    KC_9,    KC_BSPC,   _______, \
-      KC_4,    KC_5,    KC_6,    LT(_2,KC_ENT),    _______, \
-      KC_1,    KC_2,    KC_3,    KC_MINS,   _______, \
-      KC_0,    KC_COMM, KC_DOT, KC_SLSH,   _______ ),
+      KC_KP_7,    KC_KP_8,    KC_KP_9,    _______,   _______, \
+      KC_KP_4,    KC_KP_5,    KC_KP_6,    LT(_2,KC_ENT),    _______, \
+      KC_KP_1,    KC_KP_2,    KC_KP_3,    KC_UP,   _______, \
+      KC_KP_0,    KC_LEFT, KC_DOWN, KC_RIGHT,   _______ ),
+//      KC_KP_0,    KC_COMM, KC_DOT, KC_SLSH,   _______ ),
 
     [_2] = LAYOUT(
       _______, _______, _______,  _______,  _______, \

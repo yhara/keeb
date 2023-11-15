@@ -15,6 +15,11 @@
  */
 #include QMK_KEYBOARD_H
 #include "keymap_japanese.h"
+enum custom_keycodes {
+  MACRO1 = SAFE_RANGE,
+  ALT_TAB,
+  SALT_TAB,
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
@@ -80,14 +85,55 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 // Turn on LED1 when certain key is pressed
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//  switch (keycode) {
+//    case KC_ENT:
+//    case KC_BSPC:
+//    case KC_DEL:
+//      writePinLow(LED1);
+//      writePin(LED2, record->event.pressed);
+//      break;
+//  }
+//  return true;
+//}
+
+//
+// alt tab
+//
+bool is_alt_tab_active = false;
+uint16_t alt_tab_timer = 0;
+bool alt_tab_check(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case KC_ENT:
-    case KC_BSPC:
-    case KC_DEL:
-      writePinLow(LED1);
-      writePin(LED2, record->event.pressed);
-      break;
+    case ALT_TAB:
+      if (!is_alt_tab_active) {
+        is_alt_tab_active = true;
+        register_code(KC_LALT);
+      }
+      alt_tab_timer = timer_read();
+      tap_code16(KC_TAB);
+      return false;
+    case SALT_TAB:
+      if (!is_alt_tab_active) {
+        is_alt_tab_active = true;
+        register_code(KC_LALT);
+      }
+      alt_tab_timer = timer_read();
+      tap_code16(S(KC_TAB));
+      return false;
+  }
+  return true;
+}
+void matrix_scan_user(void) {
+  if (is_alt_tab_active) {
+    if (timer_elapsed(alt_tab_timer) > 1000) {
+      unregister_code(KC_LALT);
+      is_alt_tab_active = false;
+    }
+  }
+}
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    return alt_tab_check(keycode, record);
   }
   return true;
 }

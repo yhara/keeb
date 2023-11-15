@@ -26,8 +26,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              ),
     [3] = LAYOUT(
                 _______,_______,_______,KC_END, _______, _______,                     RGB_TOG,RGB_M_SN, RGB_M_P, _______, KC_NUM , KC_BSPC, \
-                _______,KC_HOME,_______,KC_DEL, KC_PGDN, _______,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,_______, _______, \
-                _______,_______,_______,_______,_______, KC_PGUP,           KC_NO,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R , KC_BTN1, KC_BTN2,  \
+                _______,KC_HOME,_______,KC_DEL, KC_PGDN, KC_BSPC,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,_______, _______, \
+                _______,_______,_______,KC_PSCR,_______, KC_PGUP,           KC_NO,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R , KC_BTN1, KC_BTN2,  \
                 _______,_______,                _______, _______,           KC_SPC,   _______,                   _______, _______, _______
              ),
 };

@@ -46,20 +46,20 @@ enum layer_names {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  /* Default Layer
      * ,-----------------------------------------------------------.
-     * | Tab|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | ;  |
+     * | Tab|  Q |  W |  E |  R |  T |  Y |  U |  I |  O |  P | BS  |
      * |-----------------------------------------------------------|
-     * |Ctl/Esc|  A |  S |  D |  F |  G |  H |  J |  K |  L | Ent  |
+     * |Ctl/Esc|  A |  S |  D |  F |  G |  H |  J |  K |  L | ;    |
      * |-----------------------------------------------------------|
      * |Sft/Tab |  Z |  X |  C |  V |  B |  N |  M |  , |  . |fn(-)|
      * |-----------------------------------------------------------|
-     * | TAB  | LAlt|Gui/T|  lower/eisu|  spc/cursor|raise/k|TAB| / |
+     * | TAB  | LAlt|Gui/T|  lower/eisu|  spc/cursor|raise/k|ENT| / |
      * `-----------------------------------------------------------'
  */
     [_QWERTY] = LAYOUT(
-        KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_SCLN,
- CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_ENT,
+        KC_TAB,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,   KC_BSPC,
+ CTL_T(KC_ESC),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN,
  LSFT_T(KC_TAB),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,  LT(_ADJUST, KC_MINS),
-        KC_TAB , KC_LALT   , GUI_T(KC_TAB), LT(_LOWER, KC_LNG2),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LNG1), KC_TAB, KC_SLSH
+        KC_TAB , KC_LALT   , GUI_T(KC_TAB), LT(_LOWER, KC_LNG2),   LT(_ADJUST, KC_SPC), LT(_RAISE,KC_LNG1), KC_ENT, KC_SLSH
         ),
 
  /* Lower Layer
@@ -68,16 +68,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-----------------------------------------------------------|
      * |        | ~  |Pipe| =  |  \ |  `  | ' | { | [ | ] |   :    |
      * |-----------------------------------------------------------|
-     * |          |    |    |    |    |Bspc| " | +  |  < |  > | _  |
+     * |          |    |    | ?  | /  |    | " | +  |  < |  > | _  |
      * |-----------------------------------------------------------|
-     * |     |    |     |           |             |    | ?  |  _   |
+     * |RST  |    |     |           |             |    | ?  |  _   |
      * `-----------------------------------------------------------'
      */
     [_LOWER] = LAYOUT(
         _______, KC_EXLM, JP_AT,   KC_HASH, KC_DLR,  KC_PERC, JP_CIRC, JP_AMPR, JP_LPRN,JP_RPRN, JP_ASTR,JP_RCBR,
 	_______,S(JP_CIRC),S(JP_YEN),JP_EQL,JP_YEN,  JP_GRV , JP_QUOT, JP_LCBR ,JP_LBRC,JP_RBRC, JP_COLN,
-	_______, _______, _______, _______, _______, KC_BSPC, JP_DQUO , JP_PLUS,S(KC_COMM),S(KC_DOT),JP_UNDS,
-	_______, _______, _______, _______, _______,_______, S(KC_SLSH), JP_UNDS
+	_______, _______, _______, S(KC_SLSH), KC_SLSH, _______, JP_DQUO , JP_PLUS,S(KC_COMM),S(KC_DOT),JP_UNDS,
+	QK_BOOT, _______, _______, _______, _______,_______, S(KC_SLSH), JP_UNDS
 	),
 
 	/* Raise Layer
@@ -100,19 +100,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	/* Adjust Layer
      * ,-----------------------------------------------------------.
-     * |Mute|    |    | End|    |    |    |    |SA(Tab)|A(Tab)|^z[ | BS |
+     * |Mute|    |    | End|    |    |    |SA(Tab)|A(Tab)|^z[ | BS |
      * |-----------------------------------------------------------|
-     * |       |Home|    | Del |    |    |Left|Down|Up  |Right|    |
+     * |       |Home|    | Del |    | BS |Left|Down|Up  |Right|    |
      * |-----------------------------------------------------------|
-     * |          |Reset|   |    |    |    |    |   |   |    |     |
+     * |          |     |   |    |    |    |    |ENT|   |    |     |
      * |-----------------------------------------------------------|
      * |Reset|    |     |           |             |     |    |     |
      * `-----------------------------------------------------------'
       */
     [_ADJUST] = LAYOUT(
         KC_MUTE, _______, _______, KC_END , _______, _______, _______, _______, _______, _______, MACRO1, KC_BSPC,
-	_______, KC_HOME, _______, KC_DEL , _______, _______, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
-	_______, QK_BOOT,   _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+	_______, KC_HOME, _______, KC_DEL , _______, KC_BSPC, KC_LEFT, KC_DOWN, KC_UP,  KC_RIGHT,  _______,
+	_______, _______,   _______, _______, _______, _______, _______, KC_ENT, _______, _______,  _______,
 	QK_BOOT,   _______, _______, _______, _______, _______, _______, _______
 	),
 };

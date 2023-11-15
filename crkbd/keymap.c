@@ -57,7 +57,7 @@ SFT_T(KC_TAB),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,S(JP_CIRC),S(JP_YEN),JP_EQL, JP_YEN,  JP_GRV,                      JP_QUOT, JP_LCBR, JP_LBRC, JP_RBRC, JP_COLN, JP_RCBR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        RESET, G(KC_Z), G(KC_X), G(KC_C), G(KC_V), XXXXXXX,                       JP_DQT,JP_PLUS,S(KC_COMM),S(KC_DOT),S(KC_SLSH),JP_UNDS,
+        RESET, G(KC_Z), G(KC_X), G(KC_C), G(KC_V), XXXXXXX,                      JP_DQUO,JP_PLUS,S(KC_COMM),S(KC_DOT),S(KC_SLSH),JP_UNDS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -69,7 +69,7 @@ SFT_T(KC_TAB),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, KC_HOME, XXXXXXX,  KC_DEL, KC_PGDN, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, KC_PGUP,                      KC_BSPC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, KC_PGUP,                      KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_BTN1, KC_BTN2,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -235,4 +235,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 #endif // OLED_DRIVER_ENABLE
+
 
