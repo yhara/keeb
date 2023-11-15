@@ -31,7 +31,9 @@ class Keyboard
     if !File.exist?(repo_dir)
       sh "git clone #{url} -b #{branch} #{repo_dir}"
     end
-    sh "cp -r #{repo_dir}/#{@path} #{QMK_DIR}/#{@path}"
+    into = File.dirname "#{QMK_DIR}/#{@path}"
+    sh "mkdir -p #{into}"
+    sh "cp -r #{repo_dir}/#{@path} #{into}"
   end
 
   def sh(cmd)
@@ -46,6 +48,12 @@ KEYBOARDS = [
   Keyboard.new("lesovoz", "keyboards/lesovoz",            url: "https://github.com/Tsquash/vial-qmk"),
   Keyboard.new("pi40",    "keyboards/1upkeyboards/pi40/", kb_path: "1upkeyboards/pi40/grid_v1_1"),
   Keyboard.new("sugarglider", "keyboards/mechwild/sugarglider"),
+  Keyboard.new("cocot46plus", "keyboards/aki27/cocot46plus", url: "https://github.com/aki27kbd/qmk_firmware"),
+  Keyboard.new("zinc", "keyboards/25keys/zinc"),
+  Keyboard.new("bolt", "keyboards/lazydesigners/bolt"),
+  Keyboard.new("daditto", "keyboards/yynmt/daditto", url: "https://github.com/yynmt/qmk_firmware/", branch: "daditto"),
+  Keyboard.new("kagamidget", "keyboards/yynmt/kagamidget"),
+  Keyboard.new("tata30", "keyboards/cerbekos/tata30", url: "https://github.com/Cerbekos/qmk_firmware/", branch: "v19_branch"),
 ]
 
 task :setup do
