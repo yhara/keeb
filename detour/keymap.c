@@ -462,7 +462,8 @@ void matrix_scan_user(void) { // The very important timer.
     void render_key_status_or_logo(){
         led_t led_state = host_keyboard_led_state();
         uint8_t mod_state = (get_mods()|get_oneshot_mods());
-        if ( !led_state.num_lock && !led_state.caps_lock && !led_state.scroll_lock
+        if ( //!led_state.num_lock &&   // This always returns true on my environment (why?)
+            !led_state.caps_lock && !led_state.scroll_lock
         && !(mod_state & MOD_MASK_SHIFT) && !(mod_state & MOD_MASK_ALT) && !(mod_state & MOD_MASK_CTRL) && !(mod_state & MOD_MASK_GUI)) {
             render_anim();
             rerender_platform = false;
