@@ -481,16 +481,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     void render_current_layer(){
         switch (get_highest_layer(layer_state)) {
                 case 0:
-                    oled_write(PSTR("L0"), false);
+                    oled_write(PSTR("BASE"), false);
                     break;
                 case 1:
-                    oled_write(PSTR("L1"), false);
+                    oled_write(PSTR("SYM"), false);
                     break;
                 case 2:
-                    oled_write(PSTR("L2"), false);
+                    oled_write(PSTR("NUM"), false);
                     break;
                 case 3:
-                    oled_write(PSTR("L3"), false);
+                    oled_write(PSTR("CUR"), false);
+                    break;
+                case 4:
+                    oled_write(PSTR("APP"), false);
                     break;
                 default:
                     oled_write(PSTR("L?"), false);    // Should never display, here as a catchall
