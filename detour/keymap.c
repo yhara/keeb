@@ -36,7 +36,7 @@ enum layer_names {
     _FN2, // Fn Layer 2
     _FN3 // Fn Layer 3
 };
-
+#define CHGAPP_LAYER _FN
 
 enum custom_keycode {
     JWRDL = QK_KB_0,
@@ -47,6 +47,7 @@ enum custom_keycode {
     TABR,
     DSKTPL,
     DSKTPR,
+    CHGAPP,
     PRVAPP,
     NXTAPP
 };
@@ -192,14 +193,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
             }
             break;
+        case CHGAPP:
+            if (record->event.pressed) {
+                (current_platform == OS_MACOS) ? register_mods(MOD_LGUI) : register_mods(MOD_LALT);
+                layer_move(CHGAPP_LAYER);
+            } else {
+                (current_platform == OS_MACOS) ? unregister_mods(MOD_LGUI) : unregister_mods(MOD_LALT);
+                layer_move(_BASE);
+            }
+            break;
         case PRVAPP:
             if (record->event.pressed) {
                 register_code(KC_LSFT);
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    (current_platform == OS_MACOS) ? register_code(KC_LGUI) : register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
+                //if (!is_alt_tab_active) {
+                //    is_alt_tab_active = true;
+                //    (current_platform == OS_MACOS) ? register_code(KC_LGUI) : register_code(KC_LALT);
+                //}
+                //alt_tab_timer = timer_read();
                 register_code(KC_TAB);
             } else {
                 unregister_code(KC_TAB);
@@ -208,11 +218,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case NXTAPP:
             if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    (current_platform == OS_MACOS) ? register_code(KC_LGUI) : register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
+                /////if (!is_alt_tab_active) {
+                /////    is_alt_tab_active = true;
+                /////    (current_platform == OS_MACOS) ? register_code(KC_LGUI) : register_code(KC_LALT);
+                /////}
+                //alt_tab_timer = timer_read();
                 register_code(KC_TAB);
             } else {
                 unregister_code(KC_TAB);
@@ -235,7 +245,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_Q,  KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
  LCTL_T(KC_A), KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, RCTL_T(KC_SCLN),
  LSFT_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, RSFT_T(KC_MINS),
-		KC_LGUI, KC_LGUI, LALT_T(KC_BSPC), LT(1,KC_LNG2),   LT(3, KC_SPC),  LT(2,KC_LNG1), KC_ENT, KC_SLSH),
+		KC_LGUI, KC_LALT, CHGAPP, LT(1,KC_LNG2),   LT(3, KC_SPC),  LT(2,KC_LNG1), KC_ENT, KC_SLSH),
 
 	[_FN] = LAYOUT(
 		KC_ESC,                                        KC_1, KC_2, KC_3, KC_4,
@@ -259,14 +269,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______, _______, _______, _______, _______, _______, _______, _______)
 };
 
-void matrix_scan_user(void) { // The very important timer.
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            (current_platform == OS_MACOS) ? unregister_code(KC_LGUI) : unregister_code(KC_LALT);
-            is_alt_tab_active = false;
-        }
-    }
-}
+//void matrix_scan_user(void) { // The very important timer.
+    //if (is_alt_tab_active) {
+        //if (timer_elapsed(alt_tab_timer) > 1000) {
+            //(current_platform == OS_MACOS) ? unregister_code(KC_LGUI) : unregister_code(KC_LALT);
+            //is_alt_tab_active = false;
+        //}
+    //}
+//}
 
 #if defined(ENCODER_MAP_ENABLE)
     const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
