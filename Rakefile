@@ -4,8 +4,11 @@ TMP_DIR = File.expand_path("~/tmp/user_qmk")
 MY_NAME = "yhara"
 
 class Keyboard
-  def initialize(name, path, url: nil, branch: "master", kb_path: nil)
-    @name, @path, @url, @branch, @kb_path = name, path, url, branch, (kb_path || path.sub("keyboards/", ""))
+  include FileUtils
+  
+  def initialize(name, path, url: nil, branch: "master", kb_path: nil, firmware_included: nil)
+    @name, @path, @url, @branch, @firmware_included = name, path, url, branch, firmware_included
+    @kb_path = kb_path || path.sub("keyboards/", "")
   end
   attr_reader :name, :path, :url, :kb_path
 
@@ -16,24 +19,48 @@ class Keyboard
   def flash
     run_qmk("flash")
   end
+  
+  def update
+    return unless @url
+	Dir.chdir(repo_dir(@name)) do
+	  sh "git pull origin master"
+	end
+  end
 
   private
 
+  # Execute `qmk xx`
   def run_qmk(subcommand)
-    copy_from_git(@url, @branch, @name) if @url
-    FileUtils.mkdir_p "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
-    sh "cp -r #{@name}/* #{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
+    prepare_source
     sh "qmk #{subcommand} -kb #{@kb_path} -km #{MY_NAME}"
   end
 
-  def copy_from_git(url, branch, name)
-    repo_dir = "#{TMP_DIR}/#{name}"
-    if !File.exist?(repo_dir)
-      sh "git clone #{url} -b #{branch} #{repo_dir}"
+  def prepare_source
+    if @url
+      copy_firmware_from_git(@url, @branch, @name)
+    end
+    if @firmware_included
+      FileUtils.mkdir_p "#{QMK_DIR}/#{@path}"
+      sh "cp -r #{@name}/* #{QMK_DIR}/#{@path}/"
+    else
+      FileUtils.mkdir_p "#{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
+      sh "cp -r #{@name}/* #{QMK_DIR}/#{@path}/keymaps/#{MY_NAME}"
+    end
+  end
+
+  # Copy the firmware from git repository. Run `git clone` if not exists.
+  def copy_firmware_from_git(url, branch, name)
+    if !File.exist?(repo_dir(name))
+      sh "git clone #{url} -b #{branch} #{repo_dir(name)}"
     end
     into = File.dirname "#{QMK_DIR}/#{@path}"
-    sh "mkdir -p #{into}"
-    sh "cp -r #{repo_dir}/#{@path} #{into}"
+    mkdir_p into
+	puts "cp_r \"#{repo_dir(name)}/#{@path}\", \"#{into}/\""
+    cp_r "#{repo_dir(name)}/#{@path}", "#{into}/"
+  end
+  
+  def repo_dir(name)
+    "#{TMP_DIR}/#{name}"
   end
 
   def sh(cmd)
@@ -54,6 +81,16 @@ KEYBOARDS = [
   Keyboard.new("daditto", "keyboards/yynmt/daditto", url: "https://github.com/yynmt/qmk_firmware/", branch: "daditto"),
   Keyboard.new("kagamidget", "keyboards/yynmt/kagamidget"),
   Keyboard.new("tata30", "keyboards/cerbekos/tata30", url: "https://github.com/Cerbekos/qmk_firmware/", branch: "v19_branch"),
+  Keyboard.new("oceanographer", "keyboards/prototypist/oceanographer"),
+  Keyboard.new("lmao", "keyboards/zicodia/tklfrlnrlmlao"),
+  Keyboard.new("littol", "keyboards/littol", firmware_included: true),
+  Keyboard.new("bruce", "keyboards/jlw/bruce_the_keyboard"),
+  Keyboard.new("koneko40", "keyboards/lordsboards/koneko40_stagger", url: "https://github.com/hlord2000/vial-qmk/", branch: "koneko40"),
+  # detour with bongocat patch (via 40% discord)
+  Keyboard.new("detour", "keyboards/nachie/syndrome", url: "https://github.com/runty/vial-qmk/", branch: "vial"),
+  #Keyboard.new("detour_nachie", "keyboards/nachie/syndrome", url: "https://github.com/nachie/vial-qmk/", branch: "nachie/syndrome"),
+  Keyboard.new("gravity36", "keyboards/takashicompany/klec_02"),
+  Keyboard.new("acai", "keyboards/quark_works/acai", url: "https://github.com/quark-works/vial-qmk/", branch: "qw-develop"),  
 ]
 
 task :setup do
@@ -69,6 +106,10 @@ KEYBOARDS.each do |keeb|
   desc "Compile and flash '#{keeb.kb_path}'"
   task "#{keeb.name}_flash" do
     keeb.flash
+  end
+  
+  task "#{keeb.name}_update" do
+    keeb.update
   end
 end
 
