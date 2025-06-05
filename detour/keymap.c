@@ -229,7 +229,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* QWERTY */
 	[_BASE] = LAYOUT(
-		KC_ESC,                                        KC_1, KC_2, KC_3, HF_TOGG,
+		KC_ESC,                                        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT,
 		KC_Q,  KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
  LCTL_T(KC_A), KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, RCTL_T(KC_SCLN),
  LSFT_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, RSFT_T(KC_MINS),
@@ -238,8 +238,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_FN] = LAYOUT(
 		KC_ESC,                                        KC_1, KC_2, KC_3, KC_4,
       KC_EXLM, JP_AT  , KC_HASH, KC_DLR , KC_PERC,  JP_CIRC, JP_AMPR, JP_LPRN, JP_RPRN, JP_ASTR,   _______,
-      S(JP_CIRC),S(JP_YEN),JP_EQL,JP_YEN, JP_GRV,   JP_QUOT, KC_MINS, JP_LBRC, JP_RBRC, JP_COLN, 
-      PRVAPP  , NXTAPP  , KC_NO ,  KC_NO,   KC_SLSH, JP_DQUO, JP_PLUS, JP_LCBR, JP_RCBR, JP_UNDS,
+      S(JP_CIRC),S(JP_YEN),JP_EQL,JP_YEN, JP_GRV,   JP_QUOT, JP_LCBR, JP_LBRC, JP_RBRC, JP_COLN, 
+      PRVAPP  , NXTAPP  , KC_NO ,  KC_SLSH,   KC_SLSH, JP_DQUO, JP_PLUS, JP_MINS, JP_RCBR, JP_UNDS,
 		_______, _______, _______, _______, _______, _______, _______, JP_QUES),
 
 	[_FN2] = LAYOUT(
@@ -251,13 +251,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	[_FN3] = LAYOUT(
 		KC_ESC,                                        KC_1, KC_2, KC_3, KC_NUM,
-      KC_ESC  ,KC_TAB  ,KC_END, KC_NO  , KC_NO  ,  KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_BSPC  ,  _______,
-      KC_HOME, KC_NO  ,KC_DEL, KC_PGDN, KC_NO  ,  KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, KC_NO  ,
-      KC_NO,   KC_NO  ,KC_NO  ,S(KC_INS)  , KC_PGUP,  KC_NO  , KC_ENT  , KC_NO  , KC_NO  , KC_NO, 
+      KC_ESC  ,KC_TAB   ,KC_END, KC_NO  , KC_NO  ,  KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_BSPC  ,  KC_BSPC,
+      KC_HOME, S(KC_TAB),KC_DEL, KC_PGDN, KC_NO  ,  KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT, KC_ENT  ,
+  C(S(KC_TAB)),C(KC_TAB),KC_NO  ,S(KC_INS)  , KC_PGUP,  KC_NO  , KC_ENT  , KC_NO  , KC_NO  , KC_NO, 
 		_______, _______, _______, _______, _______, _______, _______, _______),
         
 	[_CHGAPP] = LAYOUT(
-	  KC_NO,                                        KC_1, KC_2, KC_3, KC_NUM,
+	  KC_NO,                                        DT_PRNT, DT_DOWN, DT_UP, RGB_TOG,
       NXTAPP  ,KC_NO  ,KC_NO, KC_NO  , KC_NO  ,  KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  ,  _______,
       PRVAPP , KC_NO  ,KC_NO, KC_NO, KC_NO  ,  KC_NO, KC_NO, KC_NO,   KC_NO, KC_NO  ,
       PRVAPP,   KC_NO  ,KC_NO  , KC_NO  , KC_NO,  KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, 

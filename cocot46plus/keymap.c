@@ -62,7 +62,7 @@ LSFT_T(KC_TAB),   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                     
   [_CURSOR] = LAYOUT(
       _______,_______,_______,KC_END, _______, _______,                                           RGB_TOG,RGB_M_SN, _______, _______, _______, KC_BSPC,
       _______,KC_HOME,_______,KC_DEL, KC_PGDN, _______,                                           KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,_______, _______,
-      _______,_______,_______,_______,_______, KC_PGUP,                                           KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R , KC_BTN1, KC_BTN2,
+      _______,_______,_______,_______,S(KC_INS), KC_PGUP,                                           KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R , KC_BTN1, KC_BTN2,
                         _______, _______, _______,  _______,  KC_MS_BTN4,             KC_MS_BTN5, _______, _______, _______, _______,
                                                                  KC_PGUP, KC_MS_BTN3,  KC_PGDOWN, XXXXXXX, XXXXXXX, XXXXXXX
     ),
