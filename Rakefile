@@ -91,6 +91,8 @@ KEYBOARDS = [
   #Keyboard.new("detour_nachie", "keyboards/nachie/syndrome", url: "https://github.com/nachie/vial-qmk/", branch: "nachie/syndrome"),
   Keyboard.new("gravity36", "keyboards/takashicompany/klec_02"),
   Keyboard.new("acai", "keyboards/quark_works/acai", url: "https://github.com/quark-works/vial-qmk/", branch: "qw-develop"),  
+  Keyboard.new("amperconcrete", "keyboards/whitefacemountain/ampersand"),
+  Keyboard.new("tightwriter", "keyboards/takashicompany/tightwriter"),
 ]
 
 task :setup do
