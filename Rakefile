@@ -85,7 +85,8 @@ KEYBOARDS = [
   Keyboard.new("lmao", "keyboards/zicodia/tklfrlnrlmlao"),
   Keyboard.new("littol", "keyboards/littol", firmware_included: true),
   Keyboard.new("bruce", "keyboards/jlw/bruce_the_keyboard"),
-  Keyboard.new("koneko40", "keyboards/lordsboards/koneko40_stagger", url: "https://github.com/hlord2000/vial-qmk/", branch: "koneko40"),
+  #Keyboard.new("koneko40", "keyboards/lordsboards/koneko40_stagger", url: "https://github.com/hlord2000/vial-qmk/", branch: "koneko40"),
+  Keyboard.new("koneko40", "keyboards/koneko40", firmware_included: true), # url: "https://github.com/hlord2000/vial-qmk/", branch: "koneko40"),
   # detour with bongocat patch (via 40% discord)
   Keyboard.new("detour", "keyboards/nachie/syndrome", url: "https://github.com/runty/vial-qmk/", branch: "vial"),
   #Keyboard.new("detour_nachie", "keyboards/nachie/syndrome", url: "https://github.com/nachie/vial-qmk/", branch: "nachie/syndrome"),
